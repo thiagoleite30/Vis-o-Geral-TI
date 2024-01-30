@@ -1234,25 +1234,26 @@ def graph6(ano, opcoes_tipo_selecionadas, opcoes_operadores_selecionadas, filiai
             query += f'FILIAL_SOLICITANTE == "{value}")'
 
     if len(opcoes_tipo_selecionadas) > 0 and len(opcoes_operadores_selecionadas) > 0 and len(filiais) > 0:
-        df9 = df.query(f'{query} and (ANO_ABERTURA == {ano} and ANO_FECHAMENTO == {ano})'
-                       ' and FECHADO == 1').groupby('MES_ABERTURA')['NUMERO_CHAMADO'].size()
+        df9_chamados_fechados = df.query(f'{query} and (ANO_FECHAMENTO == {ano})'
+                                         ' and FECHADO == 1').groupby('MES_FECHAMENTO')['NUMERO_CHAMADO'].size()
         df9_chamados_abertos = df.query(
             f'{query} and (ANO_ABERTURA == {ano})').groupby('MES_ABERTURA')['NUMERO_CHAMADO'].size()
         total_chamados_abertos_periodo = df.query(
             f'{query} and (ANO_ABERTURA == {ano})').groupby('MES_ABERTURA')['NUMERO_CHAMADO'].size().sum()
         total_chamados_fechados_periodo = df.query(
-            f'{query} and (ANO_ABERTURA == {ano} and ANO_FECHAMENTO == {ano}) and FECHADO == 1').groupby('MES_ABERTURA')['NUMERO_CHAMADO'].size().sum()
+            f'{query} and (ANO_FECHAMENTO == {ano}) and FECHADO == 1').groupby('MES_ABERTURA')['NUMERO_CHAMADO'].size().sum()
         percentual_fechados_periodo = "{:.2f}%".format(
             (total_chamados_fechados_periodo / total_chamados_abertos_periodo) * 100)
+        print(f'Chamados: {df9_chamados_fechados.head()}')
         fig9 = go.Figure()
         # Adicionar as barras
         fig9.add_trace(go.Bar(
             x=['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
                 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            y=df9,
+            y=df9_chamados_fechados,
             name='Chamados Fechados',
             marker=dict(color='teal'),
-            text=df9,  # Isso coloca a contagem em cima de cada barra
+            text=df9_chamados_fechados,  # Isso coloca a contagem em cima de cada barra
             # Posiciona o texto fora das barras (no topo)
             textposition='outside',
         ))
@@ -1273,7 +1274,8 @@ def graph6(ano, opcoes_tipo_selecionadas, opcoes_operadores_selecionadas, filiai
         # Adicionar a anotação de texto para a porcentagem de resolvidos
         fig9.add_annotation(
             x=0,  # Posição aproximada no meio do gráfico
-            y=max(df9) + 800,  # Posiciona um pouco acima do valor mais alto
+            # Posiciona um pouco acima do valor mais alto
+            y=max(df9_chamados_fechados) + 800,
             text=f"{percentual_fechados_periodo} dos chamados abertos foram resolvidos em {ano}.",
             showarrow=False,
             font=dict(size=16, color="white"),
@@ -1488,5 +1490,5 @@ def graph8(opcoes_tipo_selecionadas, opcoes_operadores_selecionadas, filiais, an
 
 # Run server
 if __name__ == '__main__':
-    #app.run_server(debug=True, port=5000)
+    # app.run_server(debug=True, port=5000)
     server.run(debug=False, host='0.0.0.0')
