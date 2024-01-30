@@ -1,0 +1,11 @@
+/.venv
+/dataset_asimov.csv
+/LICENSE
+/Procfile
+/README.md
+/Todos_Chamados.csv
+/Untitled1.ipynb
+/__pycache__
+/.env
+/app_config
+/atualiza_dados.py
