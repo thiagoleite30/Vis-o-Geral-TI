@@ -598,35 +598,20 @@ def update_output(start_date, end_date, ano1, ano2):
 def indicator1(start_date, end_date, ano_comparacao, toggle):
     template = template_theme1 if toggle else template_theme2
     ano_comparacao = int(ano_comparacao)
-    # mask = month_filter(month)
-    data_work = Data_Work()
-    '''
-    if start_date is not None:
-        print(f'DATA START: {start_date}')
-        print(f'DATA START TIPO: {type(start_date)}')
-    if end_date is not None:
-        print(f'DATA END: {end_date}')
-    '''
 
-    data_atual = datetime.now()
-    query = data_work.get_data_range_open(
-        start_date, end_date, ano_comparacao)
-    # print(f'Query nno indicator 1 e datas recebidas: {query}')
-    df11_atual = df.query(
-        f'(TIPO_CHAMADO == "Incidente" or TIPO_CHAMADO == "Requisição") and (DIA_ABERTURA >= {date.fromisoformat(start_date).day} and DIA_ABERTURA <= {date.fromisoformat(end_date).day}) and (MES_ABERTURA >= {date.fromisoformat(start_date).month} and MES_ABERTURA <= {date.fromisoformat(end_date).month}) and (ANO_ABERTURA >= {date.fromisoformat(start_date).year} and ANO_ABERTURA <= {date.fromisoformat(end_date).year})')
+    df11 = df.set_index('DATA_ABERTURA')
+    df11.sort_index(inplace=True)
 
-    df11_anterior = df.query(
-        f'(TIPO_CHAMADO == "Incidente" or TIPO_CHAMADO == "Requisição") and (DIA_ABERTURA >= {date.fromisoformat(start_date).day} and DIA_ABERTURA <= {date.fromisoformat(end_date).day}) and (MES_ABERTURA >= {date.fromisoformat(start_date).month} and MES_ABERTURA <= {date.fromisoformat(end_date).month}) and (ANO_ABERTURA == {ano_comparacao})')
+    df11_atual = df11[start_date:end_date]
 
-    # df11 = df.query(
-    #    f'ANO_ABERTURA <= {data_atual.year} and ANO_ABERTURA >= {ano_comparacao} and MES_ABERTURA == {data_atual.month} and DIA_ABERTURA >= 1 and DIA_ABERTURA <= {data_atual.day}')
-    # df11_atual = df11.query(f'ANO_ABERTURA == {data_atual.year}').groupby(
-    #    'ANO_ABERTURA')['NUMERO_CHAMADO'].size().sum()
-    # df11_atual = df11.query(f'ANO_ABERTURA == {data_atual.year}').shape[0]
-    print(
-        f'\n\n\nO DF11_atual: {df11_atual.shape[0]} \n\nDF11_Anterior: {df11_anterior.shape[0]}\n\n')
-    # df11_anterior = df11.query(f'ANO_ABERTURA == {ano_comparacao}').groupby(
-    #    'ANO_ABERTURA')['NUMERO_CHAMADO'].size().sum()
+    data_inicio = pd.to_datetime(start_date)
+    data_fim = pd.to_datetime(end_date)
+
+    data_inicio = data_inicio - pd.DateOffset(years=1)
+    data_fim = data_fim - pd.DateOffset(years=1)
+
+    df11_anterior = df11[data_inicio.strftime(
+        format='%Y-%m-%d'):data_fim.strftime(format='%Y-%m-%d')]
     # Calcular a variação percentual
     percentual_variacao = (
         (df11_atual.shape[0] - df11_anterior.shape[0]) / df11_anterior.shape[0])
@@ -1490,5 +1475,5 @@ def graph8(opcoes_tipo_selecionadas, opcoes_operadores_selecionadas, filiais, an
 
 # Run server
 if __name__ == '__main__':
-    # app.run_server(debug=True, port=5000)
-    server.run(debug=False, host='0.0.0.0')
+    app.run_server(debug=True, port=5000)
+    # server.run(debug=False, host='0.0.0.0')
