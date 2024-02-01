@@ -632,7 +632,7 @@ def indicator1(start_date, end_date, ano_comparacao, toggle):
     if percentual_variacao != 0:
         texto = f"<span style='font-size:70%'>Maior em relação ao ano de {ano_comparacao} com </br></br>{df11_anterior.shape[0]} chamados abertos no periodo.</span>" if percentual_variacao >= 0 else f"<span style='font-size:70%'>Menor em relação ao ano de {ano_comparacao} com </br></br>{df11_anterior.shape[0]} chamados abertos no periodo..</span>"
     else:
-        texto = f"<span style='font-size:70%'>Igual ao ano de {ano_comparacao} com</br></br> {df11_anterior.shape[1]} chamados fechados dentro do prazo.</span>"
+        texto = f"<span style='font-size:70%'>Igual ao ano de {ano_comparacao} com</br></br> {df11_anterior.shape[0]} chamados fechados dentro do prazo.</span>"
 
     # Adicionar anotação com o texto explicativo
     fig11.add_annotation(
