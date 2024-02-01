@@ -607,8 +607,10 @@ def indicator1(start_date, end_date, ano_comparacao, toggle):
     data_inicio = pd.to_datetime(start_date)
     data_fim = pd.to_datetime(end_date)
 
-    data_inicio = data_inicio - pd.DateOffset(years=1)
-    data_fim = data_fim - pd.DateOffset(years=1)
+    diff_year = datetime.now().year - ano_comparacao
+
+    data_inicio = data_inicio - pd.DateOffset(years=diff_year)
+    data_fim = data_fim - pd.DateOffset(years=diff_year)
 
     df11_anterior = df11[data_inicio.strftime(
         format='%Y-%m-%d'):data_fim.strftime(format='%Y-%m-%d')]
