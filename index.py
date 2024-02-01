@@ -629,13 +629,18 @@ def indicator1(start_date, end_date, ano_comparacao, toggle):
         domain={'x': [0, 1], 'y': [0, 1]}
     ))
 
+    if percentual_variacao != 0:
+        texto = f"<span style='font-size:70%'>Maior em relação ao ano de {ano_comparacao} com </br></br>{df11_anterior.shape[0]} chamados abertos no periodo.</span>" if percentual_variacao >= 0 else f"<span style='font-size:70%'>Menor em relação ao ano de {ano_comparacao} com </br></br>{df11_anterior.shape[0]} chamados abertos no periodo..</span>"
+    else:
+        texto = f"<span style='font-size:70%'>Igual ao ano de {ano_comparacao} com</br></br> {df11_anterior.shape[1]} chamados fechados dentro do prazo.</span>"
+
     # Adicionar anotação com o texto explicativo
     fig11.add_annotation(
         xref="paper",
         yref="paper",
         x=0.5,
         y=0.005,  # A posição y pode precisar ser ajustada dependendo do layout do seu gráfico
-        text=f"<span style='font-size:70%'>Maior em relação ao ano de {ano_comparacao} com </br></br>{df11_anterior.shape[0]} chamados abertos no periodo.</span>" if percentual_variacao >= 0 else f"<span style='font-size:70%'>Menor em relação ao ano de {ano_comparacao} com </br></br>{df11_anterior.shape[0]} chamados abertos no periodo..</span>",
+        text=texto,
         showarrow=False,
         font=dict(size=16, color="green" if percentual_variacao >= 0 else "red")
     )
@@ -684,13 +689,18 @@ def indicator2(start_date, end_date, ano_comparacao, toggle):
         domain={'x': [0, 1], 'y': [0, 1]}
     ))
 
+    if percentual_variacao_fechados != 0:
+        texto = f"<span style='font-size:70%'>Maior em relação ao ano de {ano_comparacao} com </br></br>{df12_anterior} chamados fechados no periodo.</span>" if percentual_variacao_fechados >= 0 else f"<span style='font-size:70%'>Menor em relação ao ano de {ano_comparacao} com </br></br>{df12_anterior} chamados fechados no periodo.</span>"
+    else:
+        texto = f"<span style='font-size:70%'>Igual ao ano de {ano_comparacao} com</br></br> {df12_anterior} chamados fechados dentro do prazo.</span>"
+
     # Adicionar anotação com o texto explicativo
     fig12.add_annotation(
         xref="paper",
         yref="paper",
         x=0.5,
         y=0.005,  # A posição y pode precisar ser ajustada dependendo do layout do seu gráfico
-        text=f"<span style='font-size:70%'>Maior em relação ao ano de {ano_comparacao} com </br></br>{df12_anterior} chamados fechados no periodo.</span>" if percentual_variacao_fechados >= 0 else f"<span style='font-size:70%'>Menor em relação ao ano de {ano_comparacao} com </br></br>{df12_anterior} chamados fechados no periodo.</span>",
+        text=texto,
         showarrow=False,
         font=dict(
             size=16, color="green" if percentual_variacao_fechados >= 0 else "red")
