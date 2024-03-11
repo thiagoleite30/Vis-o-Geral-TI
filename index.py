@@ -44,7 +44,8 @@ url_theme2 = dbc.themes.DARKLY
 
 
 # ===== Reading n cleaning File ====== #
-df = pd.read_csv('Todos_Chamados.csv')
+#df = pd.read_csv('Todos_Chamados.csv')
+df = pd.read_parquet('Todos_Chamados.parquet')
 
 df['DATA_ABERTURA'] = pd.to_datetime(
     df['DATA_ABERTURA'], format='ISO8601')
